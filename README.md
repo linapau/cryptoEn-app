@@ -1,2 +1,2 @@
-# cryptoEn-app
+# cryptoEn
 ## About the project
