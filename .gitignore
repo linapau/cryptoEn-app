@@ -1,4 +1,8 @@
+#venv
 /venvEnc/
+.venvEnc
+venvEnc.bak/
+/back/back/settings.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -41,3 +45,11 @@ pip-delete-this-directory.txt
 local_settings.py
 #db.sqlite3
 #db.sqlite3-journal
+
+# Visual Studio Code # 
+.vscode/* 
+!.vscode/settings.json 
+!.vscode/tasks.json 
+!.vscode/launch.json 
+!.vscode/extensions.json 
+.history
