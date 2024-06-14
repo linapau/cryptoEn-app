@@ -32,6 +32,7 @@ project/
 │ 
 ├── ssd_encryption/
 │   ├── templates/
+
 │   │   └── data/
 │   │       └── upload_file.html
 │   ├── settings.py
