@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload File</title>
+</head>
+<body>
+    <h2>Upload File</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="file">
+        <button type="submit">Upload</button>
+    </form>
+
+    {% if file_url %}
+        <p>File uploaded successfully! <a href="{% url 'download_file' file_name=file_name %}">Download {{ file_name }}</a></p>
+    {% endif %}
+</body>
+</html>
