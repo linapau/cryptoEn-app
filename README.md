@@ -10,7 +10,7 @@ Python, Django framework
 - If not necessary, do NOT change anything in Firebase
 
 **Upload, download**
-- Run server: py manage.py runserver
+- Run server: cd project -> py manage.py runserver
 - Upload: /upload_file
 - Download: /browse_files
 - If want to login as admin, before runserver: py manage.py createsuperuser
