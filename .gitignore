@@ -1,5 +1,6 @@
 /venvEnc/
 /venv/
+/back/back/secKey.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
