@@ -21,13 +21,14 @@ from data.views import views_user, views_file
 
 
 urlpatterns = [
+    path('', include('data.urls.urls')),
     path('admin/', admin.site.urls),
     path('', include('data.urls.urls')),
     path('register/', views_user.register_user, name='register'),
     path('login/', views_user.login_user, name='login'),
     path('logout/', views_user.logout_user, name='logout'),
     path('update-profile/', views_user.update_profile, name='update_profile'),
-    path('upload_file/', views_file.upload_file, name='upload_file'),
+    path('upload_file/', views_file.upload_file, name='upload_file'), 
     path('browse_files/', views_file.browse_files, name='browse_files'),
     path('', views_file.upload_file, name='upload_file'),
 ]
