@@ -9,8 +9,7 @@ router.register(r'users', views_user.UserViewSet, basename='user')
 
 
 urlpatterns = [
-    #path('', include(router.urls)),
-    path('', views_file.upload_file, name='upload_file'),
+    path('', include(router.urls)),
     path('upload_file/', views_file.upload_file, name='upload_file'),
     path('download_file/<str:file_name>/', views_file.download_file, name='download_file'),
     path('browse_files/', views_file.browse_files, name='browse_files'),
