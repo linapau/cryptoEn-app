@@ -1,11 +1,10 @@
 import os
-
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.conf import settings
 from firebase_admin import storage
 from data.firebase import upload_file_to_storage, download_file_from_storage
-from data.cypher import Cypher
+from ssd_encryption.encryption.utils import EncryptionManager  # Import the encryption manager
 import logging
 
 firebase_storage = storage.bucket(settings.FIREBASE_BUCKET)
@@ -15,44 +14,49 @@ def upload_file(request):
         file_data = request.FILES['file']
         file_name = file_data.name
 
-        # Create Cypher instance with a passphrase
-        cypher = Cypher('your-passphrase')
-        #********************** Here should be a key word for file encrypt and decrypt ******************************
+        # Read file content
+        file_content = file_data.read()
 
-        # Read file data and encrypt it
-        file_bytes = file_data.read()
-        encrypted_data = cypher.encrypt(file_bytes)
+        # Encrypt file content
+        password = 'my_secret_password'  # Ideally, use a secure password
+        manager = EncryptionManager(password)
+        encrypted_content = manager.encrypt_data(file_content)
+
+        # Create a temporary file to store encrypted content
+        encrypted_file_path = os.path.join(settings.MEDIA_ROOT, f'encrypted_{file_name}')
+        with open(encrypted_file_path, 'wb') as encrypted_file:
+            encrypted_file.write(encrypted_content)
 
         # Upload encrypted file to Firebase Storage
-        file_url = upload_file_to_storage(encrypted_data, file_name)
+        with open(encrypted_file_path, 'rb') as encrypted_file:
+            file_url = upload_file_to_storage(encrypted_file, file_name)
 
-        return HttpResponse(f'File uploaded successfully! URL: {file_url}')
+        # Remove the temporary file after uploading
+        os.remove(encrypted_file_path)
+
+        return HttpResponse(f'File uploaded successfully!')
 
     return render(request, 'data/upload_file.html')
 
 def download_file(request, file_name):
-    # Construct the full path to the file in Firebase Storage
     file_path = f'{file_name}'  # Adjust the path as per your Firebase Storage structure
 
     try:
-        # Download file content using the function from firebase.py
         file_data = download_file_from_storage(file_path)
 
-        # Create Cypher instance with a passphrase
-        cypher = Cypher('your-passphrase')
-        # ********************** Here should be a key word for file encrypt and decrypt ******************************
+        # Decrypt file content
+        password = 'my_secret_password'  # Use the same password used during encryption
+        manager = EncryptionManager(password)
+        decrypted_content = manager.decrypt_data(file_data)
 
-        # Decrypt the file data
-        decrypted_data = cypher.decrypt(file_data)
-
-        # Create HTTP response with the decrypted file data
-        response = HttpResponse(decrypted_data, content_type='application/octet-stream')
+        response = HttpResponse(decrypted_content, content_type='application/octet-stream')
         response['Content-Disposition'] = f'attachment; filename="{file_name}"'
         return response
 
     except Exception as e:
         return HttpResponse(f'Error downloading file: {str(e)}')
 
+ 
 def browse_files(request):
     try:
         # List all files and folders recursively from Firebase Storage
