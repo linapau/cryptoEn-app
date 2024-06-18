@@ -34,7 +34,7 @@ def upload_file(request):
         # Remove the temporary file after uploading
         os.remove(encrypted_file_path)
 
-        return HttpResponse(f'File uploaded successfully! URL: {file_url}')
+        return HttpResponse(f'File uploaded successfully!')
 
     return render(request, 'data/upload_file.html')
 
