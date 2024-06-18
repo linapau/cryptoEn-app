@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.conf import settings
 from firebase_admin import storage
 from data.firebase import upload_file_to_storage, download_file_from_storage
+from data.cypher import Cypher
 import logging
 
 firebase_storage = storage.bucket(settings.FIREBASE_BUCKET)
@@ -14,8 +15,16 @@ def upload_file(request):
         file_data = request.FILES['file']
         file_name = file_data.name
 
-        # Upload file to Firebase Storage
-        file_url = upload_file_to_storage(file_data, file_name)
+        # Create Cypher instance with a passphrase
+        cypher = Cypher('your-passphrase')
+        #********************** Here should be a key word for file encrypt and decrypt ******************************
+
+        # Read file data and encrypt it
+        file_bytes = file_data.read()
+        encrypted_data = cypher.encrypt(file_bytes)
+
+        # Upload encrypted file to Firebase Storage
+        file_url = upload_file_to_storage(encrypted_data, file_name)
 
         return HttpResponse(f'File uploaded successfully! URL: {file_url}')
 
@@ -29,14 +38,21 @@ def download_file(request, file_name):
         # Download file content using the function from firebase.py
         file_data = download_file_from_storage(file_path)
 
-        # Create HTTP response with the file data
-        response = HttpResponse(file_data, content_type='application/octet-stream')
+        # Create Cypher instance with a passphrase
+        cypher = Cypher('your-passphrase')
+        # ********************** Here should be a key word for file encrypt and decrypt ******************************
+
+        # Decrypt the file data
+        decrypted_data = cypher.decrypt(file_data)
+
+        # Create HTTP response with the decrypted file data
+        response = HttpResponse(decrypted_data, content_type='application/octet-stream')
         response['Content-Disposition'] = f'attachment; filename="{file_name}"'
         return response
 
     except Exception as e:
         return HttpResponse(f'Error downloading file: {str(e)}')
-    
+
 def browse_files(request):
     try:
         # List all files and folders recursively from Firebase Storage
