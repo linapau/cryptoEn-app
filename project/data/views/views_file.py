@@ -17,7 +17,7 @@ def upload_file(request):
         # Upload file to Firebase Storage
         file_url = upload_file_to_storage(file_data, file_name)
 
-        return HttpResponse(f'File uploaded successfully! URL: {file_url}')
+        return HttpResponse('File uploaded successfully! :)')
 
     return render(request, 'data/upload_file.html')
 
