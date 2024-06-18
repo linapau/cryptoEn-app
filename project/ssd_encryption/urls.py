@@ -21,7 +21,6 @@ from data.views import views_user, views_file
 
 
 urlpatterns = [
-    path('', include('data.urls.urls')),
     path('admin/', admin.site.urls),
     path('', include('data.urls.urls')),
     path('register/', views_user.register_user, name='register'),
