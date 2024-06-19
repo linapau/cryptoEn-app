@@ -151,7 +151,7 @@ function FileList({ refresh }) {
                 <tbody>
                     {files.map((file) => (
                         <tr key={file.name}>
-                            <td>{file.name}</td>
+                            <td align='left'>{file.name}</td>
                             <td>{file.type === 'file' ? 'File' : 'Folder'}</td>
                             <td>{file.type === 'file' ? formatFileSize(file.size) : '-'}</td>
                             <td>
