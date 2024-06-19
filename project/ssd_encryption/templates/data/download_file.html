@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Download Files</title>
@@ -7,31 +8,34 @@
         ul {
             list-style-type: none;
         }
+
         ul ul {
             margin-left: 20px;
         }
     </style>
 </head>
+
 <body>
     <h2>Download Files</h2>
-    
+
     {% if files %}
-        <ul>
-            {% for file in files %}
-                <li>
-                    {% if file.type == 'folder' %}
-                        {{ file.name }}
-                        <ul>
-                            <li><em>Folder</em></li>
-                        </ul>
-                    {% else %}
-                        <a href="{% url 'download_file' file_name=file.name %}">{{ file.name }}</a>
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
+    <ul>
+        {% for file in files %}
+        <li>
+            {% if file.type == 'folder' %}
+            {{ file.name }}
+            <ul>
+                <li><em>Folder</em></li>
+            </ul>
+            {% else %}
+            <a href="{% url 'download_file' file_name=file.name %}">{{ file.name }}</a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
     {% else %}
-        <p>No files available for download.</p>
+    <p>No files available for download.</p>
     {% endif %}
 </body>
+
 </html>

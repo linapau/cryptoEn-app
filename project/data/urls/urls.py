@@ -14,4 +14,5 @@ urlpatterns = [
     path('upload_file/', views_file.upload_file, name='upload_file'),
     path('download_file/<str:file_name>/', views_file.download_file, name='download_file'),
     path('browse_files/', views_file.browse_files, name='browse_files'),
+    path('list_files/', views_file.list_files, name='list_files'),  # New endpoint
 ]
