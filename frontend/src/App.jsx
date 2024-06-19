@@ -93,7 +93,7 @@ export default App;
 */
 
 
-
+/*
 import { useState } from 'react';
 import './App.css';
 import FileUpload from './components/FileUpload';
@@ -109,6 +109,30 @@ function App() {
   return (
     <>
       <h1>Upload file</h1>
+      <FileUpload onUpload={handleUpload} />
+      <FileList key={uploadTrigger} /> {/* Re-fetch files when uploadTrigger changes *///}
+//  </>
+// );
+//}
+
+///export default App;
+
+
+import { useState } from 'react';
+import './App.css';
+import FileUpload from './components/FileUpload';
+import FileList from './components/FileList';
+
+function App() {
+  const [uploadTrigger, setUploadTrigger] = useState(false);
+
+  const handleUpload = (fileName) => {
+    setUploadTrigger(!uploadTrigger); // Toggle state to trigger re-fetch in FileList
+  };
+
+  return (
+    <>
+      <h1>File Management</h1>
       <FileUpload onUpload={handleUpload} />
       <FileList key={uploadTrigger} /> {/* Re-fetch files when uploadTrigger changes */}
     </>

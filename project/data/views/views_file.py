@@ -12,7 +12,7 @@ from rest_framework.response import Response
 firebase_storage = storage.bucket(settings.FIREBASE_BUCKET)
 
 
-
+'''
 def upload_file(request):
     if request.method == 'POST' and request.FILES.get('file'):
         file_data = request.FILES['file']
@@ -51,6 +51,56 @@ def list_files(request):
     except Exception as e:
         logging.error(f"Error fetching files from Firebase Storage: {str(e)}")
         return JsonResponse({'error': str(e)}, status=500)
+'''
+
+from django.http import JsonResponse
+from django.conf import settings
+from firebase_admin import storage
+from data.firebase import upload_file_to_storage, download_file_from_storage
+from ssd_encryption.encryption.utils import EncryptionManager
+import os
+import logging
+
+firebase_storage = storage.bucket(settings.FIREBASE_BUCKET)
+
+def upload_file(request):
+    if request.method == 'POST' and request.FILES.get('file'):
+        file_data = request.FILES['file']
+        file_name = file_data.name
+
+        # Read file content
+        file_content = file_data.read()
+
+        # Encrypt file content
+        password = 'my_secret_password'  # Ideally, use a secure password
+        manager = EncryptionManager(password)
+        encrypted_content = manager.encrypt_data(file_content)
+
+        # Create a temporary file to store encrypted content
+        encrypted_file_path = os.path.join(settings.MEDIA_ROOT, f'encrypted_{file_name}')
+        with open(encrypted_file_path, 'wb') as encrypted_file:
+            encrypted_file.write(encrypted_content)
+
+        # Upload encrypted file to Firebase Storage
+        with open(encrypted_file_path, 'rb') as encrypted_file:
+            file_url = upload_file_to_storage(encrypted_file, file_name)
+
+        # Remove the temporary file after uploading
+        os.remove(encrypted_file_path)
+
+        return JsonResponse({'message': 'File uploaded successfully!', 'file_name': file_name})
+
+    return JsonResponse({'error': 'File upload failed'}, status=400)
+
+def list_files(request):
+    try:
+        blobs = firebase_storage.list_blobs()
+        files = [{'name': blob.name, 'type': 'folder' if blob.name[-1] == '/' else 'file'} for blob in blobs]
+        return JsonResponse({'files': files})
+    except Exception as e:
+        logging.error(f"Error fetching files from Firebase Storage: {str(e)}")
+        return JsonResponse({'error': str(e)}, status=500)
+
 
 
 def download_file(request, file_name):
