@@ -16,13 +16,42 @@ h2 {
 
 .basicBtn {
   background-color: rgb(207, 205, 230);
-  color: white;
+  /*color: white;*/
   padding: 15px 32px;
   text-align: center;
 }
 
 #btndown {
   margin: 5px;
+}
+
+input {
+  color: white;
+}
+
+table {
+  width: 100%;
+}
+
+td {
+  color: white;
+  font-weight: bold;
+  text-align: left;
+
+}
+
+table {
+  border: 1px solid rgb(131, 140, 223);
+  padding: 20px;
+  border-radius: 10px;
+  background-color: rgb(12, 21, 108);
+}
+
+th {
+  color: white;
+  font-weight: bolder;
+  text-align: left;
+  font-size: 25px;
 }
 
 .logo {
