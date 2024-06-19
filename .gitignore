@@ -1,6 +1,6 @@
 /venvEnc/
 /venv/
-project/data/private_key_firebase.json
+/project/data/private_key_firebase.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
