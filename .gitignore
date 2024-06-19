@@ -1,7 +1,6 @@
 /venvEnc/
 /venv/
-/back/back/secKey.py
-.env
+/project/data/private_key_firebase.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
